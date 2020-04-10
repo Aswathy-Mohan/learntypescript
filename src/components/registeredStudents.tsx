@@ -1,6 +1,10 @@
 import React,{Component} from 'react';
 import {Table} from "react-bootstrap";
+import {IStudent} from "../interfaces/student.interface"
 
+interface IStudentListProps{
+    studentList:IStudent[]
+}
 
 class RegisteredStudents extends Component<IStudentListProps>{
     render(){
@@ -28,11 +32,4 @@ class RegisteredStudents extends Component<IStudentListProps>{
 
 export default RegisteredStudents;
 
-interface IStudentProps{
-    fname:string,
-    lname:string,
-    age:number
-  }
-interface IStudentListProps{
-    studentList:IStudentProps[]
-}
+

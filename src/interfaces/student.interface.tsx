@@ -3,7 +3,7 @@ export interface IStudentState {
     student:IStudent,
     error:string
   }
-  interface IStudent{
+export interface IStudent{
     fname:string,
     lname:string,
     age:number
