@@ -6,14 +6,14 @@ import "./App.scss";
 
 class App extends Component<{}, IStudentState> {
   constructor(props: any) {
-    super(props);
+    super(props)
     this.state = {
       studentList: [],
       student: { fname: "", lname: "", age: 0 },
       error: "",
     };
   }
-  
+
   handleChange = (e: React.FormEvent<HTMLInputElement>) => {
     const { name, value } = e.currentTarget;
     this.setState({ student: { ...this.state.student, [name]: value } ,
