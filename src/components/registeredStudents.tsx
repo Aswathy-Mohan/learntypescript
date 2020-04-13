@@ -1,35 +1,30 @@
-import React,{Component} from 'react';
-import {Table} from "react-bootstrap";
-import {IStudent} from "../interfaces/student.interface"
+import React from "react";
+import { Column, Table,AutoSizer} from "react-virtualized";
+import { IStudent } from "../interfaces/student.interface";
+import "react-virtualized/styles.css";
 
-interface IStudentListProps{
-    studentList:IStudent[]
+interface IStudentListProps {
+  studentList: IStudent[];
 }
 
-class RegisteredStudents extends Component<IStudentListProps>{
-    render(){
-        const{studentList}=this.props;
-        return(<Table striped bordered hover size="sm" className="mt-3">
-            <thead>
-            <tr>
-                 <td>FirstName</td>
-                 <td>LastName</td>
-                 <td>Age</td>
-            </tr>
-            </thead>
-            <tbody>
-            {studentList.map(({fname,lname,age})=>
-            <tr>
-               
-                <td>{fname}</td>
-                <td>{lname}</td>
-                <td>{age}</td>
-            </tr>)}
-            </tbody>
-        </Table>)
-    }
- }
-
+const RegisteredStudents =(props:IStudentListProps)=>{
+    const list = props.studentList;
+    return (
+        <AutoSizer>{({ width}) => (
+      <Table
+        rowClassName="mt-3 table-row"
+        headerHeight={40}
+        width={width}
+        height={200}
+        rowHeight={50}
+        rowCount={list.length}
+        rowGetter={({ index }) => list[index]}
+      >
+        <Column label="FirstName" dataKey="fname" width={150} />
+        <Column label="LastName" dataKey="lname" width={150} />
+        <Column label="Age" dataKey="age" width={100} />
+      </Table>)}
+      </AutoSizer>
+    );
+  }
 export default RegisteredStudents;
-
-

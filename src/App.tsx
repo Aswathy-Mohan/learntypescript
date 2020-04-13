@@ -1,88 +1,58 @@
-import React, { Component } from "react";
-import { Form, Button,Row,Col } from "react-bootstrap";
+import React, {useState } from "react";
+import {useDispatch,useSelector} from "react-redux";
 import RegisteredStudents from "./components/registeredStudents";
-import { IStudentState } from "./interfaces/student.interface";
+import {AppState} from "./reducers";
 import "./App.scss";
+import Registration from "./components/registration";
+import {addStudent} from "./data/student/studentActionCreator";
 
-class App extends Component<{}, IStudentState> {
-  constructor(props: any) {
-    super(props)
-    this.state = {
-      studentList: [],
-      student: { fname: "", lname: "", age: 0 },
-      error: "",
-    };
-  }
+const App=()=> {
+  const dispatch=useDispatch();
+  const studentList=useSelector((state:AppState)=>state.students.studentList)
+  const[student,setStudent]=useState(
+    { fname: "", 
+    lname: "", 
+    age: 0 }
+  );
+  const[error,setError]=useState("");
 
-  handleChange = (e: React.FormEvent<HTMLInputElement>) => {
+  
+  const handleChange = (e: React.FormEvent<HTMLInputElement>) => {
     const { name, value } = e.currentTarget;
-    this.setState({ student: { ...this.state.student, [name]: value } ,
-      error:""});
+    setStudent({...student, [name]: value });
+    setError("");
   };
 
-  handleSubmit = (e: React.MouseEvent<HTMLFormElement>) => {
+  
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (
-      Object.values(this.state.student).some(
+      Object.values(student).some(
         (property) => property === "null" || property === "" ||property===0
       )
     ) {
       let errorMessage = "All fields are required";
-      this.setState({ error: errorMessage });
+      setError(errorMessage);
     } else {
-      this.setState({
-        studentList: [...this.state.studentList, this.state.student],
-        error: "",
-      });
-    }
+      dispatch(addStudent(student));
+      setError("");
+   }
   };
 
-  render() {
     return (
       <div className="App ml-3 mt-3">
         <div className="div-box">
-          <Form onSubmit={this.handleSubmit}>
-            <Row >
-              <Col>
-              <Form.Control type="text" 
-              className="input-control" 
-              placeholder="enter firstname" 
-              name="fname" 
-              onChange={this.handleChange}
-              />
-              </Col>
-              <Col>
-              <Form.Control
-                type="text"
-                className="input-control"
-                placeholder="enter lastname"
-                name="lname"
-                onChange={this.handleChange}
-              />
-              </Col>
-            </Row>
-            <Form.Group>
-              <Form.Control
-                type="number"
-                className="input-control mt-3"
-                placeholder="enter age"
-                name="age"
-                onChange={this.handleChange}
-              />
-              </Form.Group>
-            
-            <Button variant="primary" type="submit"  block>
-              Submit
-            </Button>
-            {this.state.error && <span className="error">{this.state.error}</span>}
-          </Form>
-          {this.state.studentList.length > 0 && (
-            <RegisteredStudents studentList={this.state.studentList} />
+          <Registration 
+          handleSubmit={ handleSubmit }
+          handleChange={ handleChange } 
+          error={error}/>
+          {studentList.length > 0 && (
+            <RegisteredStudents studentList={studentList} />
           )}
         </div>
       </div>
     );
   }
-}
+
 
 export default App;
